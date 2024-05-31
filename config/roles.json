@@ -1,0 +1,32 @@
+{
+  "roles": [
+    {
+      "name": "director",
+      "permissions": [
+        "all"
+      ]
+    },
+    {
+      "name": "administrator",
+      "permissions": [
+        "manage_staff",
+        "manage_outlet",
+        "manage_menu",
+        "manage_orders"
+      ]
+    },
+    {
+      "name": "manager",
+      "permissions": [
+        "manage_menu",
+        "manage_orders"
+      ]
+    },
+    {
+      "name": "Transporter",
+      "permissions": [
+        "manage_delivery_orders"
+      ]
+    }
+  ]
+}
