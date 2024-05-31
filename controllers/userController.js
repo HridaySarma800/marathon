@@ -3,6 +3,9 @@ const bcrypt = require("bcrypt");
 const db = require("../Models");
 const jwt = require("jsonwebtoken");
 const {v4: uuidv4} = require('uuid'); // Import UUID generator
+const accountSid = 'AC3d1896738a6cbec443b4b9d02a8ba396';
+const authToken = '11dcd4ab4cfaa4a11f43df364573711b';
+const client = require('twilio')(accountSid, authToken);
 
 // Assigning users to the variable User
 const User = db.users;
@@ -11,7 +14,7 @@ const User = db.users;
 //hashing users password before its saved to the database with bcrypt
 const signup = async (req, res) => {
     try {
-        const {phone, role, password} = req.body;
+        const {phone, role} = req.body;
         let userId;
         let isUnique = false;
         while (!isUnique) {
@@ -25,8 +28,7 @@ const signup = async (req, res) => {
         const data = {
             userId,
             phone,
-            role,
-            password: await bcrypt.hash(password, 10),
+            role
         };
         //saving the user
         const user = await User.create(data);
@@ -88,6 +90,18 @@ const login = async (req, res) => {
     }
 };
 
+const requestOTP = async (req,res) =>{
+    try{
+        client.verify.v2.services("VA821bb18e56d0e3c63c9cf4f8d8fbb94a")
+            .verifications
+            .create({to: '+918399811340', channel: 'sms',code:'111111'})
+            .then(verification => console.log(verification.sid));
+        return res.status(200).send("Otp sent");
+    }catch (error){
+        console.log(error);
+    }
+}
+
 function getToken(user) {
     return jwt.sign({id: user.id}, process.env.SECRET_KEY, {
         expiresIn: 24 * 60 * 60 * 1000,
@@ -97,4 +111,5 @@ function getToken(user) {
 module.exports = {
     signup,
     login,
+    requestOTP
 };

@@ -20,14 +20,14 @@ const saveUser = async (req, res, next) => {
             return res.status(409).send("Username already taken");
         }
         // Check if the email already exists in the database
-        const emailCheck = await User.findOne({
+        const phoneCheck = await User.findOne({
             where: {
-                email: req.body.email,
+                phone: req.body.phone,
             },
         });
         // If the email exists in the database, respond with a status of 409 (Conflict)
-        if (emailCheck) {
-            return res.status(409).send("Email already registered");
+        if (phoneCheck) {
+            return res.status(409).send("Phone already registered");
         }
         // If both username and email are unique, proceed to the next middleware function
         next();
