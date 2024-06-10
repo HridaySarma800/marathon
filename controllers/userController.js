@@ -15,18 +15,18 @@ const User = db.users;
 const signup = async (req, res) => {
     try {
         const {phone, role} = req.body;
-        let userId;
+        let id;
         let isUnique = false;
         while (!isUnique) {
-            userId = uuidv4();
+            id = uuidv4();
             // Check if the generated UUID already exists in the database
-            const existingUser = await User.findOne({where: {userId: userId}});
+            const existingUser = await User.findOne({where: {id: id}});
             if (!existingUser) {
                 isUnique = true; // Set flag to true if UUID is unique
             }
         }
         const data = {
-            userId,
+            id,
             phone,
             role
         };

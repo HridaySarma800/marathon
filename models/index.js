@@ -2,7 +2,7 @@ const { Sequelize, DataTypes } = require('sequelize');
 
 // Establish a new Sequelize instance to connect to the PostgreSQL database
 // Connection URL format: postgres://<username>:<password>@<host>:<port>/<database_name>
-const sequelize = new Sequelize('postgres://admin:password@localhost:5433/marathon_db', { dialect: 'postgres' });
+const sequelize = new Sequelize('postgresql://admin:58I1f8C2Kc100y5IL6oEthuw@singularly-upright-mustang.a1.pgedge.io/javelin_db', { dialect: 'postgres' });
 
 // Test the database connection
 sequelize.authenticate()

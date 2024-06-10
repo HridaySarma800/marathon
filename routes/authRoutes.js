@@ -16,6 +16,6 @@ router.post('/login', login )
 
 router.get('/otp',requestOTP)
 
-router.post('/validate',validate)
+// router.post('/validate',validate)
 
 module.exports = router
