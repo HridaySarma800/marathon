@@ -6,7 +6,9 @@ import twilio from "twilio";
 const accountSid = process.env.TWILLIO_ACCOUNT_SID;
 const authToken = process.env.TWILLIO_AUTH_TOKEN;
 const client = twilio(accountSid, authToken);
+
 const User = db.users;
+let OTP = "";
 
 const validate = async (req, res) => {
   const { otp, phone } = req.body;
@@ -131,3 +133,5 @@ export default {
   requestOTP,
   validate,
 };
+
+

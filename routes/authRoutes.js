@@ -8,4 +8,5 @@ router.get("/otp", requestOTP);
 // router.post('/validate',validate)
 router.post("/validate", validate);
 
+
 export default router;
