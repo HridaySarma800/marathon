@@ -1,13 +1,12 @@
-const express = require('express')
+import express from "express";
+import userController from "../controllers/userController.js";
+const { validate, requestOTP, signup } = userController;
 
-const userController = require('../Controllers/userController')
-const { validate,requestOTP,signup } = userController
+const router = express.Router();
 
-const router = express.Router()
+router.get("/otp", requestOTP);
+// router.post('/validate',validate)
+router.post("/validate", validate);
 
-router.get('/otp',requestOTP);
 
-
-router.post('/validate',validate);
-
-module.exports = router
+export default router;
