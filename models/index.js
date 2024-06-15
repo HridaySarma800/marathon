@@ -1,8 +1,10 @@
 const { Sequelize, DataTypes } = require('sequelize');
+require('dotenv').config({path:'./env'});
 
 // Establish a new Sequelize instance to connect to the PostgreSQL database
 // Connection URL format: postgres://<username>:<password>@<host>:<port>/<database_name>
-const sequelize = new Sequelize('postgresql://admin:58I1f8C2Kc100y5IL6oEthuw@singularly-upright-mustang.a1.pgedge.io/javelin_db', { dialect: 'postgres' });
+
+const sequelize = new Sequelize(process.env.POSTGRE_URL, { dialect: 'postgres' });
 
 // Test the database connection
 sequelize.authenticate()
@@ -10,7 +12,7 @@ sequelize.authenticate()
         console.log('Database connected to marathon');
     })
     .catch((err) => {
-        console.log('Error connecting to the database:', err);
+        console.log('Error connecting to the  database:', err);
     });
 
 // Initialize an empty object to hold our database-related objects
