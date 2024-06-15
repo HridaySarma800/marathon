@@ -1,21 +1,11 @@
+import express from "express";
+import userController from "../controllers/userController.js";
+const { validate, requestOTP, signup } = userController;
 
-//importing modules
-const express = require('express')
-const userController = require('../controllers/userController')
-const { signup, login,requestOTP } = userController
-const userAuth = require('../Middlewares/userAuth')
+const router = express.Router();
 
-const router = express.Router()
-
-//signup endpoint
-//passing the middleware function to the signup
-// router.post('/signup', userAuth.saveUser, signup)
-
-//login route
-router.post('/login', login )
-
-router.get('/otp',requestOTP)
-
+router.get("/otp", requestOTP);
 // router.post('/validate',validate)
+router.post("/validate", validate);
 
-module.exports = router
+export default router;
