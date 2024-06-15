@@ -1,4 +1,4 @@
-import db from "../Models/index.js";
+import db from "../models/index.js";
 import getToken from "../middleware/auth.js";
 import { v4 as uuidv4 } from "uuid";
 import twilio from "twilio";
