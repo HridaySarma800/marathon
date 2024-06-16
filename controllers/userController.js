@@ -59,14 +59,14 @@ const requestOTP = async (req, res) => {
   }
 };
 
-const registerUser = async (req, res) => {
+const registerUser = async (req, res, next) => {
   try {
+    console.log(req.body);
     const {
       firstName,
       lastName,
       dob,
       aadhar,
-      verified,
       phone,
       secondaryPhone,
       permanentAddress,
@@ -75,24 +75,22 @@ const registerUser = async (req, res) => {
       state,
       role,
     } = req.body;
-    let id;
-    let tid;
-    let isUniqueUUID = false;
-    let isUniqueTID = false;
-    while (!isUniqueUUID) {
-      id = uuidv4();
-      const existingUser = await User.findOne({ where: { id: id } });
-      if (!existingUser) {
-        isUniqueUUID = true;
-      }
-    }
-    while (!isUniqueTID) {
-      tid = uuidv4();
-      const existingUser = await User.findOne({ where: { tid: tid } });
-      if (!existingUser) {
-        isUniqueTID = true;
-      }
-    }
+
+    console.log("First Name:", firstName);
+    console.log("Last Name:", lastName);
+    console.log("Date of Birth:", dob);
+    console.log("Aadhar:", aadhar);
+    console.log("Phone:", phone);
+    console.log("Secondary Phone:", secondaryPhone);
+    console.log("Permanent Address:", permanentAddress);
+    console.log("Correspondence Address:", correspondenceAddress);
+    console.log("Pincode:", pincode);
+    console.log("State:", state);
+      
+    const id = uuidv4();
+    const tid = uuidv4();
+    console.log("id:", id);
+    console.log("tid:", tid);
     const data = {
       id,
       firstName,
@@ -100,38 +98,39 @@ const registerUser = async (req, res) => {
       dob,
       isActive: true,
       aadhar,
-      aadharVerified,
+      aadharVerified: false,
       phone,
-      phoneVerified,
+      phoneVerified: false,
       secondaryPhone,
-      secondaryPhoneVerified,
-      pAddress,
-      cAddress,
+      secondaryPhoneVerified: false,
+      permanentAddress,
+      correspondenceAddress,
       pincode,
       state,
       tid,
       role,
     };
 
-    const user = await User.create(data);
-
+    const user = await User.create(data).then((data) => {
+      console.log(data.toJSON());
+    });
     if (user) {
       return res.status(201).send({
         message: "User created successfully",
         data: data,
       });
     } else {
+      console.log("Details are not correct");
       return res.status(409).send("Details are not correct");
     }
   } catch (err) {
     console.log(err);
     res.status(500).send({ message: "An error occurred" });
+    next();
   }
 };
-
 export default {
   requestOTP,
   validate,
+  registerUser,
 };
-
-

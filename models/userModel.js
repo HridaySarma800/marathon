@@ -25,7 +25,7 @@ export default (sequelize, DataTypes) => {
       },
       isActive: {
         type: DataTypes.BOOLEAN,
-        allowNull: false, // The userName field must have a value
+        allowNull: true, // The userName field must have a value
       },
       aadhar: {
         type: DataTypes.STRING,
@@ -33,7 +33,7 @@ export default (sequelize, DataTypes) => {
       },
       isVerified: {
         type: DataTypes.BOOLEAN,
-        allowNull: false, // The userName field must have a value
+        allowNull: true, // The userName field must have a value
       },
       phone: {
         type: DataTypes.STRING,

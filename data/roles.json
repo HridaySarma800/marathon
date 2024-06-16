@@ -23,7 +23,7 @@
         ]
       },
       {
-        "name": "Transporter",
+        "name": "transporter",
         "permissions": [
           "manage_delivery_orders"
         ]
