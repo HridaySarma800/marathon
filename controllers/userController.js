@@ -1,14 +1,12 @@
 import db from "../models/index.js";
 import getToken from "../middleware/auth.js";
-import { v4 as uuidv4 } from "uuid";
 import twilio from "twilio";
-
+import GlobalResponse from "../models/global_response.js";
 const accountSid = process.env.TWILLIO_ACCOUNT_SID;
 const authToken = process.env.TWILLIO_AUTH_TOKEN;
 const client = twilio(accountSid, authToken);
 
 const User = db.users;
-let OTP = "";
 
 const validate = async (req, res) => {
   const { otp, phone } = req.body;
@@ -61,7 +59,6 @@ const requestOTP = async (req, res) => {
 
 const registerUser = async (req, res, next) => {
   try {
-    console.log(req.body);
     const {
       firstName,
       lastName,
@@ -76,23 +73,7 @@ const registerUser = async (req, res, next) => {
       role,
     } = req.body;
 
-    console.log("First Name:", firstName);
-    console.log("Last Name:", lastName);
-    console.log("Date of Birth:", dob);
-    console.log("Aadhar:", aadhar);
-    console.log("Phone:", phone);
-    console.log("Secondary Phone:", secondaryPhone);
-    console.log("Permanent Address:", permanentAddress);
-    console.log("Correspondence Address:", correspondenceAddress);
-    console.log("Pincode:", pincode);
-    console.log("State:", state);
-      
-    const id = uuidv4();
-    const tid = uuidv4();
-    console.log("id:", id);
-    console.log("tid:", tid);
     const data = {
-      id,
       firstName,
       lastName,
       dob,
@@ -107,25 +88,25 @@ const registerUser = async (req, res, next) => {
       correspondenceAddress,
       pincode,
       state,
-      tid,
       role,
     };
 
-    const user = await User.create(data).then((data) => {
-      console.log(data.toJSON());
-    });
-    if (user) {
-      return res.status(201).send({
-        message: "User created successfully",
-        data: data,
+    await User.create(data)
+      .then((data) => {
+        const response = new GlobalResponse(
+          true,
+          "User created successfully",
+          data
+        );
+        return res.status(201).json(response);
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(500).send({ message: "An error occurred " + err });
       });
-    } else {
-      console.log("Details are not correct");
-      return res.status(409).send("Details are not correct");
-    }
   } catch (err) {
     console.log(err);
-    res.status(500).send({ message: "An error occurred" });
+    res.status(500).send({ message: "An error occurred " + err });
     next();
   }
 };

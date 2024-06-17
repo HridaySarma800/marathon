@@ -1,23 +1,19 @@
-// Define the User model
-
 export default (sequelize, DataTypes) => {
-  // Define the User model with three fields: userName, email, and password
-  // Return the defined model
   const User = sequelize.define(
     "users",
     {
       id: {
-        type: DataTypes.STRING,
-        allowNull: false,
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
       },
       firstName: {
         type: DataTypes.STRING,
-        allowNull: false, // The userName field must have a value
+        allowNull: false,
       },
       lastName: {
         type: DataTypes.STRING,
-        allowNull: false, // The userName field must have a value
+        allowNull: false,
       },
       dob: {
         type: DataTypes.DATE,
@@ -25,43 +21,45 @@ export default (sequelize, DataTypes) => {
       },
       isActive: {
         type: DataTypes.BOOLEAN,
-        allowNull: true, // The userName field must have a value
       },
       aadhar: {
         type: DataTypes.STRING,
-        allowNull: false, // The userName field must have a value
+        allowNull: false,
       },
       isVerified: {
         type: DataTypes.BOOLEAN,
-        allowNull: true, // The userName field must have a value
+        allowNull: true,
       },
       phone: {
         type: DataTypes.STRING,
-        allowNull: false, // The userName field must have a value
+        allowNull: false,
+        isNumeric: true,
       },
       secondaryPhone: {
         type: DataTypes.STRING,
-        allowNull: true, // The userName field must have a value
+        allowNull: true,
+        isNumeric: true,
       },
       pAddress: {
         type: DataTypes.STRING,
-        allowNull: true, // The userName field must have a value
+        allowNull: true,
       },
       cAddress: {
         type: DataTypes.STRING,
-        allowNull: true, // The userName field must have a value
+        allowNull: true,
       },
       pincode: {
         type: DataTypes.STRING,
-        allowNull: true, // The userName field must have a value
+        allowNull: true,
+        isNumeric: true,
       },
       state: {
         type: DataTypes.STRING,
-        allowNull: true, // The userName field must have a value
+        allowNull: true,
       },
       tid: {
-        type: DataTypes.STRING,
-        allowNull: false,
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
       },
       role: {
         type: DataTypes.STRING,
@@ -73,6 +71,6 @@ export default (sequelize, DataTypes) => {
       tableName: "users",
     }
   );
-  User.sync({ force: true });
+  User.sync();
   return User;
 };
