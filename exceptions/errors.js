@@ -1,27 +1,38 @@
-import { CustomError } from "./customError";
+import { CustomError } from "./customError.js";
 
-class ClientError extends CustomError{
-    constructor(message){
-        super(message,400);
-    }
+class ClientError extends CustomError {
+  constructor(message) {
+    super(message, 400);
+  }
 }
 
-class UnauthorizedError extends CustomError{
-    constructor(message){
-        super(message,401);
-    }
+class UnauthorizedError extends CustomError {
+  constructor(message) {
+    super(message, 401);
+  }
 }
 
-class ForbiddenError extends CustomError{
-    constructor(message){
-        super(message,403);
-    }
+class ForbiddenError extends CustomError {
+  constructor(message) {
+    super(message, 403);
+  }
 }
 
-class NotFoundError extends CustomError{
-    constructor(message){
-        super(message,404);
-    }
+class NotFoundError extends CustomError {
+  constructor(message) {
+    super(message, 404);
+  }
 }
 
-export default {ClientError,UnauthorizedError,ForbiddenError,NotFoundError};
+class ServerError extends CustomError {
+  constructor(message) {
+    super(message, 500);
+  }
+}
+export default {
+  ClientError,
+  UnauthorizedError,
+  ForbiddenError,
+  NotFoundError,
+  ServerError,
+};

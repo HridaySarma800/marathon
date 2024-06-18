@@ -6,9 +6,9 @@ const router = express.Router();
 import authorize from "../middleware/auth.js";
 import Roles from "../middleware/auth.js";
 
-router.get("/requestOtp", [], asyncHandler(requestOTP));
+router.post("/requestOtp", [], asyncHandler(requestOTP));
 
-router.post("/verifyOTP", [], asyncHandler(validate));
+router.post("/verifyOtp", [], asyncHandler(validate));
 
 router.post(
   "/registerDirector",

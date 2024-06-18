@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import config from "../config/index.js";
-export default function authorize(roles = []) {
+export default function authorize(roles = []) { 
   if (!Array.isArray(roles)) roles = [roles];
 
   return (req, res, next) => {
