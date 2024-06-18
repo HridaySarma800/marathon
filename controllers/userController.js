@@ -5,9 +5,15 @@ import GlobalResponse from "../models/global_response.js";
 const accountSid = process.env.TWILLIO_ACCOUNT_SID;
 const authToken = process.env.TWILLIO_AUTH_TOKEN;
 const client = twilio(accountSid, authToken);
-import errors from '../exceptions/errors.js';
+import errors from "../exceptions/errors.js";
 
-const { ClientError, UnauthorizedError, ForbiddenError, NotFoundError, ServerError } = errors;
+const {
+  ClientError,
+  UnauthorizedError,
+  ForbiddenError,
+  NotFoundError,
+  ServerError,
+} = errors;
 const User = db.users;
 
 const validate = async (req, res) => {
