@@ -38,8 +38,7 @@ const validate = async (req, res) => {
       let token = getToken(user);
       res.cookie("accessToken", token, {
         maxAge: 24 * 60 * 60,
-        httpOnly: true,
-        secure:true
+        httpOnly: false,
       });
       res.status(200).send(
         new GlobalResponse(true, "OTP verified successfully", {
