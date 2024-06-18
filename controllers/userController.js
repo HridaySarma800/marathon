@@ -36,10 +36,10 @@ const validate = async (req, res) => {
     // TODO: It should be user. Remove the not (!) operator.
     if (user) {
       let token = getToken(user);
-      console.log(token.toString());
       res.cookie("accessToken", token, {
         maxAge: 24 * 60 * 60,
         httpOnly: true,
+        secure:true
       });
       res.status(200).send(
         new GlobalResponse(true, "OTP verified successfully", {
