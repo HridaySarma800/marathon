@@ -17,7 +17,6 @@ sequelize
     console.log("Error connecting to the  database:", err);
   });
 
-
 // Initialize an empty object to hold our database-related objects
 const db = {};
 
