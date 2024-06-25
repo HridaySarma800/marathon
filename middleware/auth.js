@@ -26,7 +26,7 @@ export default function authorize(roles = []) {
       const token =
         req.headers["Authorization"] || req.headers["authorization"];
 
-      if (!token) return sendError("Error no token");
+      if (!token) return sendError("Error no token found !");
       if (token.indexOf("Bearer") != 0)
         return sendError("Error: Token format invalid");
       const tokenString = token.split(" ")[1];
