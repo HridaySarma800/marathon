@@ -23,7 +23,7 @@ router.post(
 );
 
 router.post(
-  "/registerManager",
+  "/registerManager", 
   authorize(Roles.Director, Roles.Admin),
   asyncHandler(registerUser)
 );

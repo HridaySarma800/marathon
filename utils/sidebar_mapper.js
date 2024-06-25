@@ -1,7 +1,8 @@
+import Roles from "../middleware/auth.js";
+
 const getSidebar = (role) => {
   let data = [];
-
-  if (role === CURRENT_ROLE.ADMIN || role === CURRENT_ROLE.DIRECTOR) {
+  if (role === "director" || role === "admin") {
     data.push({
       sectionTitle: "Admin",
       sectionData: [
@@ -82,11 +83,7 @@ const getSidebar = (role) => {
     });
   }
 
-  if (
-    role === CURRENT_ROLE.ADMIN ||
-    role === CURRENT_ROLE.MANAGER ||
-    role === CURRENT_ROLE.DIRECTOR
-  ) {
+  if (role === "director" || role === "admin" || role === "manager") {
     data.push({
       sectionTitle: "Manage",
       sectionData: [
@@ -124,5 +121,7 @@ const getSidebar = (role) => {
     ],
   });
 
-  return { data };
+  return data;
 };
+
+export default getSidebar;
