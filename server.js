@@ -9,7 +9,12 @@ import cors from "cors"; // Import the cors package
 // Assign app to
 const app = express(); // Initialize the Express application
 
-app.use(cors()); // Enable CORS for all routes and origins
+const corsOptions = {
+  origin: "*", // Allow all origins
+  credentials: true, // Access-Control-Allow-Credentials: true
+  optionsSuccessStatus: 200, // Status code for successful OPTIONS request
+};
+app.use(cors(corsOptions));
 
 // Middleware setup
 app.use(json()); // Middleware to parse JSON bodies from incoming requests
