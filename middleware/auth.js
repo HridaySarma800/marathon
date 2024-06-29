@@ -23,8 +23,7 @@ export default function authorize(roles = []) {
       return req.res.status(403).json({ message: msg });
     }
     try {
-      const token =
-        req.headers["Authorization"] || req.headers["authorization"];
+      const token = req.headers.authorization;
 
       if (!token) return sendError("Error no token found !");
       if (token.indexOf("Bearer") != 0)

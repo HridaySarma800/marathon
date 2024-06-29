@@ -4,8 +4,12 @@ import authRoutes from "./routes/authRoutes.js";
 import appRoutes from "./routes/appRoutes.js";
 import config from "./config/index.js";
 import { errorHandler } from "./middleware/errorHandler.js";
+import cors from "cors"; // Import the cors package
+
 // Assign app to
 const app = express(); // Initialize the Express application
+
+app.use(cors()); // Enable CORS for all routes and origins
 
 // Middleware setup
 app.use(json()); // Middleware to parse JSON bodies from incoming requests
