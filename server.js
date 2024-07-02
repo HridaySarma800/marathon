@@ -4,20 +4,12 @@ import authRoutes from "./routes/authRoutes.js";
 import appRoutes from "./routes/appRoutes.js";
 import config from "./config/index.js";
 import { errorHandler } from "./middleware/errorHandler.js";
+import cors from "cors";
 
 // Assign app to
 const app = express(); // Initialize the Express application
 
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin","*");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-  );
-  res.header("Access-Control-Allow-Credentials", true);
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, UPDATE");
-  next();
-});
+app.use(cors({ origin: "*" }));
 
 // Middleware setup
 app.use(json()); // Middleware to parse JSON bodies from incoming requests
