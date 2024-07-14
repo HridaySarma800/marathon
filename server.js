@@ -9,7 +9,7 @@ import cors from "cors";
 // Assign app to
 const app = express(); // Initialize the Express application
 
-app.use(cors({ origin: "*" }));
+app.use(cors({ origin: "*/" }));
 
 // Middleware setup
 app.use(json()); // Middleware to parse JSON bodies from incoming requests
