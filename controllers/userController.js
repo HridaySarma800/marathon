@@ -91,6 +91,7 @@ const requestOTP = async (req, res) => {
     throw new ServerError(err.message);
   }
 };
+
 const registerUser = async (req, res, next) => {
   try {
     const {
@@ -142,6 +143,7 @@ const registerUser = async (req, res, next) => {
   }
   next();
 };
+
 export default {
   requestOTP,
   validate,
