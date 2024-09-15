@@ -1,0 +1,249 @@
+@startuml Refined Normalized Food Delivery System
+
+' User Management
+abstract class User {
+  +UserID: UUID (PK)
+  +Username: string
+  +Email: string
+  +Password: string (hashed)
+  +Phone: string
+  +CreatedAt: datetime
+  +LastLogin: datetime
+}
+
+class SuperAdmin {
+  +SuperAdminID: UUID (PK, FK to User)
+  +AccessLevel: int
+}
+
+class Admin {
+  +AdminID: UUID (PK, FK to User)
+  +Department: string
+}
+
+class Customer {
+  +CustomerID: UUID (PK, FK to User)
+  +LoyaltyPoints: int
+}
+
+class DeliveryPerson {
+  +DeliveryPersonID: UUID (PK, FK to User)
+  +VehicleType: string
+  +LicenseNumber: string
+}
+
+class Address {
+  +AddressID: UUID (PK)
+  +UserID: UUID (FK to User)
+  +AddressLine1: string
+  +AddressLine2: string
+  +City: string
+  +State: string
+  +PostalCode: string
+  +IsDefault: boolean
+}
+
+class UserLanguage {
+  +UserID: UUID (PK, FK to User)
+  +LanguageCode: string (PK)
+}
+
+class DeliveryPersonLocation {
+  +LocationID: UUID (PK)
+  +DeliveryPersonID: UUID (FK to DeliveryPerson)
+  +Latitude: float
+  +Longitude: float
+  +Timestamp: datetime
+}
+
+' Menu Management
+class MenuItem {
+  +MenuItemID: UUID (PK)
+  +Name: string
+  +BasePrice: decimal
+  +Type: enum (Dish or Produce)
+}
+
+class MenuItemDescription {
+  +MenuItemID: UUID (PK, FK to MenuItem)
+  +LanguageCode: string (PK)
+  +Description: string
+}
+
+class MenuItemCategory {
+  +CategoryID: UUID (PK)
+  +Name: string
+}
+
+class MenuItemCategoryAssignment {
+  +MenuItemID: UUID (PK, FK to MenuItem)
+  +CategoryID: UUID (PK, FK to MenuItemCategory)
+}
+
+class ProduceQuantity {
+  +ProduceQuantityID: UUID (PK)
+  +MenuItemID: UUID (FK to MenuItem)
+  +Quantity: decimal
+  +Unit: string
+  +Price: decimal
+}
+
+' Order Management
+class Order {
+  +OrderID: UUID (PK)
+  +CustomerID: UUID (FK to Customer)
+  +AddressID: UUID (FK to Address)
+  +OrderDate: datetime
+  +ScheduledDeliveryDate: datetime
+  +TotalAmount: decimal
+  +Status: enum
+  +IsBulkOrder: boolean
+}
+
+class OrderItem {
+  +OrderItemID: UUID (PK)
+  +OrderID: UUID (FK to Order)
+  +MenuItemID: UUID (FK to MenuItem)
+  +Quantity: int
+  +UnitPrice: decimal
+}
+
+' Payment System
+class Payment {
+  +PaymentID: UUID (PK)
+  +OrderID: UUID (FK to Order)
+  +Amount: decimal
+  +PaymentMethod: string
+  +Status: enum
+  +TransactionDate: datetime
+}
+
+' Rating and Review
+class Review {
+  +ReviewID: UUID (PK)
+  +OrderID: UUID (FK to Order)
+  +Rating: int
+  +Comment: string
+  +CreatedAt: datetime
+}
+
+' Loyalty Program
+class LoyaltyTransaction {
+  +TransactionID: UUID (PK)
+  +CustomerID: UUID (FK to Customer)
+  +Points: int
+  +TransactionType: enum
+  +TransactionDate: datetime
+}
+
+' Promotions and Discounts
+class Promotion {
+  +PromotionID: UUID (PK)
+  +Code: string
+  +DiscountType: enum
+  +DiscountValue: decimal
+  +StartDate: datetime
+  +EndDate: datetime
+}
+
+class PromotionDescription {
+  +PromotionID: UUID (PK, FK to Promotion)
+  +LanguageCode: string (PK)
+  +Description: string
+}
+
+class OrderPromotion {
+  +OrderID: UUID (PK, FK to Order)
+  +PromotionID: UUID (PK, FK to Promotion)
+}
+
+' Delivery Management
+class DeliveryAssignment {
+  +AssignmentID: UUID (PK)
+  +OrderID: UUID (FK to Order)
+  +DeliveryPersonID: UUID (FK to DeliveryPerson)
+  +AssignedAt: datetime
+  +EstimatedDeliveryTime: datetime
+  +ActualDeliveryTime: datetime
+}
+
+' Favourite Item List
+class FavoriteItem {
+  +CustomerID: UUID (PK, FK to Customer)
+  +MenuItemID: UUID (PK, FK to MenuItem)
+}
+
+' Order Scheduling
+class ScheduledOrder {
+  +ScheduleID: UUID (PK)
+  +CustomerID: UUID (FK to Customer)
+  +OrderTemplate: JSON
+  +Frequency: enum
+  +NextScheduledDate: datetime
+}
+
+' Customer Support
+class SupportTicket {
+  +TicketID: UUID (PK)
+  +CustomerID: UUID (FK to Customer)
+  +Subject: string
+  +Description: string
+  +Status: enum
+  +CreatedAt: datetime
+  +ResolvedAt: datetime
+}
+
+' Analytics and Reporting
+class DailyMetrics {
+  +MetricID: UUID (PK)
+  +Date: date
+  +MetricType: string
+  +MetricValue: decimal
+}
+
+' Referral System
+class Referral {
+  +ReferralID: UUID (PK)
+  +ReferrerID: UUID (FK to Customer)
+  +ReferredID: UUID (FK to Customer)
+  +ReferralCode: string
+  +Status: enum
+  +ReferralDate: datetime
+}
+
+' Relationships
+User <|-- SuperAdmin
+User <|-- Admin
+User <|-- Customer
+User <|-- DeliveryPerson
+
+User "1" -- "0..*" UserLanguage
+User "1" -- "0..*" Address
+DeliveryPerson "1" -- "0..*" DeliveryPersonLocation
+
+Customer "1" -- "0..*" Order
+Customer "1" -- "0..*" LoyaltyTransaction
+Customer "1" -- "0..*" SupportTicket
+Customer "1" -- "0..*" Referral
+
+MenuItem "1" -- "0..*" MenuItemDescription
+MenuItem "0.." -- "0.." MenuItemCategory
+MenuItem "0.." -- "0.." MenuItemCategoryAssignment
+MenuItem "1" -- "0..*" ProduceQuantity
+
+Order "1" -- "0..*" OrderItem
+Order "1" -- "0..1" Payment
+Order "1" -- "0..1" Review
+Order "1" -- "0..1" DeliveryAssignment
+Order "0.." -- "0.." OrderPromotion
+
+Promotion "1" -- "0..*" PromotionDescription
+
+DeliveryPerson "1" -- "0..*" DeliveryAssignment
+
+Customer "1" -- "0..*" FavoriteItem
+MenuItem "1" -- "0..*" FavoriteItem
+
+Customer "1" -- "0..*" ScheduledOrder
+
+@enduml

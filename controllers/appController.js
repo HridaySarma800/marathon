@@ -5,14 +5,15 @@ const getSidebarItems = async (req, res) => {
     const items = getSidebar(req.user.role);
     return res
       .status(200)
-      .send(new GlobalResponse(true, "Items fetched successfully", items));
+      .send(new GlobalResponse(true, "Items fetched successfully.", items));
   } catch (err) {
     console.log(err);
     return res
       .status(500)
-      .send(new GlobalResponse(false, "Failed to fetch items", {}));
+      .send(new GlobalResponse(false, "Failed to fetch items.", {}));
   }
 };
+
 
 export default {
   getSidebarItems,

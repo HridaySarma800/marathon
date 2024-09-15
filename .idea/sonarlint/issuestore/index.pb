@@ -1,14 +1,8 @@
 
 4
 .env,3/c/3c84dcdc6bbe3d7817c49dcdc327b926fea1808a
->
-models/role.js,1/7/172da147f0ae584951809c10af6f4d365e0308e8
 D
 routes/authRoutes.js,a/f/af95d176017c5dac3db822204427137952111b46
-E
-models/permissions.js,0/f/0f9942912e659003da37c14b14f8ce5041c64918
-G
-middlewares/userAuth.js,e/1/e16e6d91e3e01e332eb0c0b3943fde104e628689
 9
 	server.js,d/c/dc60ea9ee1ff6246bf342463277d5b914db2883d
 ?
@@ -21,10 +15,6 @@ M
 config/index.js,a/a/aa8a70fc9f39394872921561977e736d2ac97a3c
 L
 controllers/appController.js,5/c/5cd0dfad4eec464c36a5295e3592c5c85d7b2e9d
-?
-data/roles.json,2/a/2aee8c291545a3f416646481e232abc9c496623b
-A
-data/sidebar.json,f/e/feb1b9e39faae64808714efb70ac6e3e8bd9c612
 A
 package-lock.json,f/a/fa288d1472d29beccb489a676f68739ad365fc47
 >
