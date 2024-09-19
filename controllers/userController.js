@@ -17,8 +17,8 @@ const {
 const User = db.users;
 
 const validate = async (req, res) => {
-  const { otp, phone } = req.body;
   try {
+    const { otp, phone } = req.body;
     const verifiedResponse = await client.verify.v2
       .services(process.env.TWILLIO_SERVICE_SID)
       .verificationChecks.create({
@@ -30,29 +30,33 @@ const validate = async (req, res) => {
       where: {
         phone: phone,
       },
-    }).catch((err) => {
-      throw new NotFoundError("Account with this number does not exist.");
     });
-    // TODO: It should be user. Remove the not (!) operator.
-    if (user) {
-      let token = getToken(user);
-      res.cookie("accessToken", token, {
-        maxAge: 24 * 60 * 60,
-        httpOnly: true,
-        sameSite: "None",
-        secure: true,
-      });
-      res.status(200).send(
-        new GlobalResponse(true, "OTP verified successfully", {
-          smsData: verifiedResponse,
-          userData: user,
-        })
-      );
-    } else {
+
+    if (!user) {
       throw new NotFoundError("Account with this number does not exist.");
     }
+
+    let token = getToken(user);
+    res.cookie("accessToken", token, {
+      maxAge: 24 * 60 * 60,
+      httpOnly: true,
+      sameSite: "None",
+      secure: true,
+    });
+    res.status(200).send(
+      new GlobalResponse(true, "OTP verified successfully", {
+        smsData: verifiedResponse,
+        userData: user,
+      })
+    );
   } catch (err) {
-    throw new ServerError(err.message);
+    if (err instanceof NotFoundError) {
+      res.status(404).send(new GlobalResponse(false, err.message));
+    } else if (err instanceof ServerError) {
+      res.status(500).send(new GlobalResponse(false, err.message));
+    } else {
+      res.status(400).send(new GlobalResponse(false, err.message));
+    }
   }
 };
 
@@ -63,32 +67,35 @@ const requestOTP = async (req, res) => {
       where: {
         phone: phone,
       },
-    }).catch((err) => {
-      throw new NotFoundError("Account with this number does not exist.");
     });
-    // TODO: It should be user. Remove the not (!) operator.
-    if (user) {
-      client.verify.v2
-        .services(process.env.TWILLIO_SERVICE_SID)
-        .verifications.create({
-          to: `+91${phone}`,
-          channel: "sms",
-        })
-        .then((verification) => {
-          let response = new GlobalResponse(true, "OTP sent successfully", {
-            phone: verification.to,
-          });
-          return res.status(200).send(response);
-        });
-    } else {
-      return res.status(401).send(
-        new GlobalResponse(true, "Account with this number does not exist.", {
-          phone: verification.to,
-        })
-      );
+
+    if (!user) {
+      throw new NotFoundError("Account with this number does not exist.");
     }
-  } catch (error) {
-    throw new ServerError(err.message);
+
+    client.verify.v2
+      .services(process.env.TWILLIO_SERVICE_SID)
+      .verifications.create({
+        to: `+91${phone}`,
+        channel: "sms",
+      })
+      .then((verification) => {
+        let response = new GlobalResponse(true, "OTP sent to +91"+phone, {
+          phone: verification.to,
+        });
+        res.status(200).send(response);
+      })
+      .catch((err) => {
+        throw new ServerError(err.message);
+      });
+  } catch (err) {
+    if (err instanceof NotFoundError) {
+      res.status(404).send(new GlobalResponse(false, err.message));
+    } else if (err instanceof ServerError) {
+      res.status(500).send(new GlobalResponse(false, err.message));
+    } else {
+      res.status(400).send(new GlobalResponse(false, err.message));
+    }
   }
 };
 
@@ -133,13 +140,19 @@ const registerUser = async (req, res, next) => {
           "User created successfully.",
           data
         );
-        return res.status(201).json(response);
+        res.status(201).json(response);
       })
       .catch((err) => {
         throw new ClientError(err.message);
       });
   } catch (err) {
-    throw new ServerError(err.message);
+    if (err instanceof ClientError) {
+      res.status(400).send(new GlobalResponse(false, err.message));
+    } else if (err instanceof ServerError) {
+      res.status(500).send(new GlobalResponse(false, err.message));
+    } else {
+      res.status(500).send(new GlobalResponse(false, err.message));
+    }
   }
   next();
 };
