@@ -6,12 +6,10 @@ import inventoryRoutes from "./routes/inventoryRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import config from "./config/index.js";
 import { errorHandler } from "./middleware/errorHandler.js";
-import cors from "cors";
 
 // Assign app to
 const app = express(); // Initialize the Express application.
 
-app.use(cors({ origin: "*" }));
 
 // Middleware setup.
 app.use(json()); // Middleware to parse JSON bodies from incoming requests.
@@ -26,3 +24,4 @@ app.use(errorHandler);
 app.listen(config.port, () =>
   console.log(`Server is connected on ${config.port}`)
 ); // Log message confirming the server is running.
+
