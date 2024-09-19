@@ -6,12 +6,14 @@ import inventoryRoutes from "./routes/inventoryRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import config from "./config/index.js";
 import { errorHandler } from "./middleware/errorHandler.js";
+import cors from 'cors';
 
 // Assign app to
 const app = express(); // Initialize the Express application.
 
 
 // Middleware setup.
+app.use(cors());
 app.use(json()); // Middleware to parse JSON bodies from incoming requests.
 app.use(urlencoded({ extended: true })); // Middleware to parse URL-encoded bodies.
 app.use(cookieParser()); // Middleware to parse cookies from the request headers.
